@@ -32,7 +32,7 @@ RUN \
 
 RUN \
     groupadd --gid ${SPAMD_GROUP_GID} -r ${SPAMD_GROUP} && \
-    useradd -r --uid ${SPAMD_USER_UID} -g ${SPAMD_GROUP} ${SPAMD_USER}
+    useradd -r -d /home/spamd -m --uid ${SPAMD_USER_UID} -g ${SPAMD_GROUP} ${SPAMD_USER}
 
 RUN \
     groupadd --gid ${RUN_GROUP_GID} -r ${RUN_GROUP} && \
