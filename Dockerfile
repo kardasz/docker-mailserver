@@ -42,7 +42,7 @@ RUN \
 # Install git, download and extract Stash and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq \
-    && apt-get install -y wget curl postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql dovecot-sieve dovecot-managesieved postfix-policyd-spf-python clamav-milter clamav-unofficial-sigs milter-greylist spamass-milter opendkim opendkim-tools syslog-ng supervisor \
+    && apt-get install -y wget curl postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql dovecot-sieve dovecot-managesieved postfix-policyd-spf-python clamsmtp clamav clamav-milter clamav-unofficial-sigs milter-greylist spamass-milter opendkim opendkim-tools syslog-ng supervisor \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
