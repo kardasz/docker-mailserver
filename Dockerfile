@@ -4,6 +4,33 @@ MAINTAINER Krzysztof Kardasz <krzysztof@kardasz.eu>
 # Update system and install required packages
 ENV DEBIAN_FRONTEND noninteractive
 
+# Use the default unprivileged account. This could be considered bad practice
+# on systems where multiple processes end up being executed by 'daemon' but
+# here we only ever run one process anyway.
+ENV RUN_USER            mailserver
+ENV RUN_USER_UID        6000
+ENV RUN_GROUP           mailserver
+ENV RUN_GROUP_GID       6000
+
+# Use the default unprivileged account. This could be considered bad practice
+# on systems where multiple processes end up being executed by 'daemon' but
+# here we only ever run one process anyway.
+ENV OPENDKIM_USER            opendkim
+ENV OPENDKIM_USER_UID        6001
+ENV OPENDKIM_GROUP           opendkim
+ENV OPENDKIM_GROUP_GID       6001
+
+ENV VERSION 1
+
+RUN \
+    groupadd --gid ${OPENDKIM_GROUP_GID} -r ${OPENDKIM_GROUP} && \
+    useradd -r --uid ${OPENDKIM_USER_UID} -g ${OPENDKIM_GROUP} ${OPENDKIM_USER}
+
+RUN \
+    groupadd --gid ${RUN_GROUP_GID} -r ${RUN_GROUP} && \
+    useradd -r --uid ${RUN_USER_UID} -g ${RUN_GROUP} ${RUN_USER}
+
+
 # Install git, download and extract Stash and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq \
@@ -20,19 +47,7 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
     && rm /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu
 
-# Use the default unprivileged account. This could be considered bad practice
-# on systems where multiple processes end up being executed by 'daemon' but
-# here we only ever run one process anyway.
-ENV RUN_USER            mailserver
-ENV RUN_USER_UID        6000
-ENV RUN_GROUP           mailserver
-ENV RUN_GROUP_GID       6000
 
-ENV VERSION 1
-
-RUN \
-    groupadd --gid ${RUN_GROUP_GID} -r ${RUN_GROUP} && \
-    useradd -r --uid ${RUN_USER_UID} -g ${RUN_GROUP} ${RUN_USER}
 
 RUN sed -i -E 's/^(\s*)system\(\);/\1unix-stream("\/dev\/log");/' /etc/syslog-ng/syslog-ng.conf
 
