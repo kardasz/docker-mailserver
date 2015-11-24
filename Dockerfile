@@ -24,7 +24,8 @@ ENV VERSION 1
 
 RUN \
     groupadd --gid ${OPENDKIM_GROUP_GID} -r ${OPENDKIM_GROUP} && \
-    useradd -r --uid ${OPENDKIM_USER_UID} -g ${OPENDKIM_GROUP} ${OPENDKIM_USER}
+    useradd -r -d /var/run/opendkim --uid ${OPENDKIM_USER_UID} -g ${OPENDKIM_GROUP} ${OPENDKIM_USER} && \
+    mkdir -p  /var/run/opendkim && chown ${OPENDKIM_USER}:${OPENDKIM_GROUP} /var/run/opendkim
 
 RUN \
     groupadd --gid ${RUN_GROUP_GID} -r ${RUN_GROUP} && \
