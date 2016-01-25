@@ -26,8 +26,8 @@ Vagrant.configure("2") do |config|
       node.vm.network "private_network", type: "dhcp"
       node.vm.hostname = vm_hostname
 
-      node.vm.provision "update-packages", type: "shell", inline: "/usr/bin/apt-get update; /usr/bin/apt-get upgrade -y; /usr/bin/apt-get autoremove -y", privileged: true
-      node.vm.provision "install-packages", type: "shell", inline: "/usr/bin/apt-get -y install vim mc wget htop screen pwgen rsync curl git bash-completion autoconf libtool build-essential", privileged: true
-      node.vm.provision "install-docker", type: "shell", inline: "/usr/bin/wget -qO- https://get.docker.com/gpg | /usr/bin/apt-key add - && /usr/bin/wget -qO- https://get.docker.com/ | /bin/sh ", privileged: true
+      #node.vm.provision "update-packages", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update; /usr/bin/apt-get upgrade -y; /usr/bin/apt-get autoremove -y", privileged: true
+      node.vm.provision "install-packages", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update; /usr/bin/apt-get -y install vim mc wget htop screen pwgen rsync curl git bash-completion autoconf libtool build-essential", privileged: true
+      node.vm.provision "install-docker", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/wget -qO- https://get.docker.com/gpg | /usr/bin/apt-key add - && /usr/bin/wget -qO- https://get.docker.com/ | /bin/sh ", privileged: true
   end
 end
