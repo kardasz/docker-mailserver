@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-box      = 'debian/jessie64'
+box      = 'debian/contrib-jessie64'
 
 # VM configuration
 vm_hostname = 'docker-mailserver'
@@ -26,8 +26,6 @@ Vagrant.configure("2") do |config|
       node.vm.network "private_network", type: "dhcp"
       node.vm.hostname = vm_hostname
 
-      #node.vm.provision "update-packages", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update; /usr/bin/apt-get upgrade -y; /usr/bin/apt-get autoremove -y", privileged: true
-      node.vm.provision "install-packages", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update; /usr/bin/apt-get -y install vim mc wget htop screen pwgen rsync curl git bash-completion autoconf libtool build-essential", privileged: true
-      node.vm.provision "install-docker", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive /usr/bin/wget -qO- https://get.docker.com/gpg | /usr/bin/apt-key add - && /usr/bin/wget -qO- https://get.docker.com/ | /bin/sh ", privileged: true
+      node.vm.provision "setup", type: "shell", inline: "DEBIAN_FRONTEND=noninteractive echo 'deb http://ftp.debian.org/debian jessie-backports main contrib non-free' > /etc/apt/sources.list.d/jessie-backports.list && apt-get update && apt-get install -y vim wget htop screen rsync curl git bash-completion apt-transport-https ca-certificates && echo 'deb https://apt.dockerproject.org/repo debian-jessie main' > /etc/apt/sources.list.d/docker.list && apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && apt-get update && apt-get install -y docker-engine", privileged: true
   end
 end
